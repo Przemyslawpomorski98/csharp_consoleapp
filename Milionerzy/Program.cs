@@ -7,12 +7,11 @@ namespace Milionerzy
     {
         static void Main(string[] args)
         {
-            var game = new GameHud();
+            var game = new GameManager();
             game.GameIntroduce();
             game.UserIntroduce();
             game.GameBegin();
-            game.AskQuestion();
-            game.GameCompletion();
+            game.GetAskQuestions();
 
         }
     }
