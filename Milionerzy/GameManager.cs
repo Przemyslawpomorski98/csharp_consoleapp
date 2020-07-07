@@ -1,20 +1,27 @@
 ﻿using Milionerzy.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Milionerzy
 {
     public class GameManager
     {
         public List<QuestionItem> QuestionList { get; set; }
-        
+        public QuestionNumber GetQuestionNumber { get; set; }
+        private static string UserName { get; set; }
+        private static string FilePath { get; set; }
+
+        private static int[] Prize = new int[] {0, 500, 1000, 2000, 5000, 10000, 20000, 40000, 75000, 125000, 250000, 500000, 1000000};
+
         public void GameIntroduce()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Witaj w grze o nazwie Milionerzy!");
             Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("Już za chwilę przedstawimy Ci 10 pytań, na które będziesz musiał udzielić poprawnej odpowiedzi, żeby wygrać fortunę!");
+            Console.WriteLine("Już za chwilę przedstawimy Ci 12 pytań, na które będziesz musiał udzielić poprawnej odpowiedzi, żeby wygrać fortunę!");
             Console.ReadLine();
             Console.WriteLine();
             Console.WriteLine("Każde pytanie posiada 4 możliwe odpowiedzi, ale zawsze tylko jedna jest poprawna.");
@@ -31,18 +38,28 @@ namespace Milionerzy
         public void UserIntroduce()
         {
             Console.WriteLine("Proszę podaj mi swoje imię:");
-            var userName = Console.ReadLine();
+            UserName = Console.ReadLine();
             Console.Clear();
-            Console.WriteLine(userName + " Twój ostatni zarobek to 2 000 PLN");
-            Console.ReadLine();
-            Console.Clear();
+
+            FilePath = UserName.ToLower() + ".txt";
+
+            if (File.Exists(FilePath))
+            {
+                var fileContent = File.ReadAllText(FilePath);
+                if (fileContent.Length > 0)
+                {
+                    Console.WriteLine(UserName + " Twój ostatni zarobek to: " + fileContent + " PLN!");
+                    Console.ReadLine();
+                }
+            }
             
+            Console.Clear();   
         }
 
         public void GameBegin()
         {
-            Console.WriteLine("Przemek, witam Cię w grze Milionerzy! Oto twoje pytanie:");
-           
+            Console.WriteLine(UserName + " nie ma co przedłużać, ZACZYNAJMY!");
+            Console.ReadLine();
         }
 
         public void GetAskQuestions()
@@ -108,11 +125,17 @@ namespace Milionerzy
             questionItem.CorrectAnswer = "d";
             QuestionList.Add(questionItem);
 
+            var random = new Random();
+            var randomList = QuestionList.OrderBy(item => random.Next());
 
-            foreach (var question in QuestionList)
+            GetQuestionNumber = 0;
+            var i = 0;
+
+            foreach (var question in randomList)
             {
                 Console.Clear();
-                question.QuestionGeneration();
+                question.QuestionGeneration(GetQuestionNumber);
+                GetQuestionNumber++;
                 Console.WriteLine("Poprawna odpowiedź to odpowiedź A, B, C, czy D?:");
                 var userAnswer = Console.ReadLine();
                 if(userAnswer.ToLower() == question.CorrectAnswer)
@@ -120,6 +143,8 @@ namespace Milionerzy
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("DOBRZE!");
+                    i++;
+                    Console.WriteLine("Posiadasz już " + Prize[i] + " PLN!");
                     Console.ReadLine();
                     Console.ResetColor();
                 }
@@ -135,14 +160,20 @@ namespace Milionerzy
                 }
             }
 
-            GameCompletion();
+            GameCompletion(i);
         }
 
 
-        public void GameCompletion()
+        public void GameCompletion(int prize)
         {
+            var userPrize = Prize[prize];
             Console.WriteLine("Dziękuję Ci bardzo za grę! Mam nadzieję, że niedługo znów sie spotakmy!");
-            Console.WriteLine("Twoje zarobione pieniądze to: 6 000 PLN!");
+            Console.WriteLine("Twoje zarobione pieniądze to: " + userPrize + " PLN!");
+            if (File.Exists(FilePath))
+            {
+                File.Delete(FilePath);
+            }
+            File.WriteAllText(FilePath, userPrize.ToString());
         }
 
     }
