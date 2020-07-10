@@ -12,6 +12,7 @@ namespace Milionerzy
         public QuestionNumber GetQuestionNumber { get; set; }
         private static string UserName { get; set; }
         private static string FilePath { get; set; }
+        private static int LifebuoyUsed { get; set; }
 
         private static int[] Prize = new int[] {0, 500, 1000, 2000, 5000, 10000, 20000, 40000, 75000, 125000, 250000, 500000, 1000000};
 
@@ -26,7 +27,7 @@ namespace Milionerzy
             Console.WriteLine();
             Console.WriteLine("Każde pytanie posiada 4 możliwe odpowiedzi, ale zawsze tylko jedna jest poprawna.");
             Console.WriteLine();
-            Console.WriteLine("Do wykorzystania posiadasz 2 koła ratunkowe - 50:50, oraz telefon do przyjaciela (UWAGA! twój przyjaciel nie zawsze musi wskazać poprawną odpowiedź!)");
+            Console.WriteLine("Możesz 2 razy zadzwonić do przyjaciela [przycisk K] (UWAGA! twój przyjaciel nie zawsze musi wskazać poprawną odpowiedź!)");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("POWODZENIA!");
@@ -128,6 +129,7 @@ namespace Milionerzy
             var random = new Random();
             var randomList = QuestionList.OrderBy(item => random.Next());
 
+            LifebuoyUsed = 0;
             GetQuestionNumber = 0;
             var i = 0;
 
@@ -136,7 +138,7 @@ namespace Milionerzy
                 Console.Clear();
                 question.QuestionGeneration(GetQuestionNumber);
                 GetQuestionNumber++;
-                Console.WriteLine("Poprawna odpowiedź to odpowiedź A, B, C, czy D?:");
+                Console.WriteLine("Poprawna odpowiedź to odpowiedź A, B, C, czy D?, a może chcesz zadzwonić do przyjaciela? [K]:");
                 var userAnswer = Console.ReadLine();
                 if(userAnswer.ToLower() == question.CorrectAnswer)
                 {
@@ -147,6 +149,44 @@ namespace Milionerzy
                     Console.WriteLine("Posiadasz już " + Prize[i] + " PLN!");
                     Console.ReadLine();
                     Console.ResetColor();
+                }
+                else if(userAnswer.ToLower() == "k" )
+                {
+                    if (LifebuoyUsed < 2)
+                    {
+                        LifebuoyUsed++;
+                        Lifebuoy lifebuoy = new Lifebuoy();
+                        lifebuoy.Phone(question.CorrectAnswer, UserName);
+                        var secondAnswer = Console.ReadLine();
+                        if (secondAnswer == question.CorrectAnswer)
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("DOBRZE!");
+                            i++;
+                            Console.WriteLine("Posiadasz już " + Prize[i] + " PLN!");
+                            Console.ReadLine();
+                            Console.ResetColor();
+                        }
+                    }
+                    else if(LifebuoyUsed >= 2)
+                    {
+                        Console.WriteLine("Niestety, wykorzystałeś już wszystkie koła ratunkowe, proszę odpowiedz na pytanie.");
+                        Console.WriteLine();
+                        Console.WriteLine("Poprawna odpowiedź to odpowiedź A, B, C, czy D?:");
+                        var thirdAnswer = Console.ReadLine();
+                        if (thirdAnswer == question.CorrectAnswer)
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("DOBRZE!");
+                            i++;
+                            Console.WriteLine("Posiadasz już " + Prize[i] + " PLN!");
+                            Console.ReadLine();
+                            Console.ResetColor();
+                        }
+                    }
+                    
                 }
                 else
                 {
