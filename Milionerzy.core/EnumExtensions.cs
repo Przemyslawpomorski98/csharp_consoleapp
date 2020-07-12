@@ -26,6 +26,10 @@
                     return "9. ";
                 case QuestionNumber.Pytanie_10:
                     return "10. ";
+                case QuestionNumber.Pytanie_11:
+                    return "11. ";
+                case QuestionNumber.Pytanie_12:
+                    return "12. ";
                 default:
                     return "Następne pytanie: ";
             }

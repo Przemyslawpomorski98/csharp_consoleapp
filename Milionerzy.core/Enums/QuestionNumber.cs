@@ -11,6 +11,8 @@
         Pytanie_7,
         Pytanie_8,
         Pytanie_9,
-        Pytanie_10
+        Pytanie_10,
+        Pytanie_11,
+        Pytanie_12
     }
 }

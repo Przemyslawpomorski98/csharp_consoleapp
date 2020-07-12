@@ -16,8 +16,29 @@ namespace Milionerzy
 
         private static int[] Prize = new int[] {0, 500, 1000, 2000, 5000, 10000, 20000, 40000, 75000, 125000, 250000, 500000, 1000000};
 
+        public void GameInterface()
+        {
+            Console.WriteLine("Witaj! Zanim zaczniemy, proszę podaj mi swoję imię!:");
+            UserName = Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine(UserName + ", proszę, wybierz co chcesz zrobić z listy ponieżej:");
+            Console.WriteLine();
+            Console.WriteLine("1. Zacznij grę Milionerzy!");
+            Console.WriteLine("2. Wyjdź");
+            var userChoice = Console.ReadLine();
+            if (userChoice == "1")
+            {
+                GameIntroduce();
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
+        }
+
         public void GameIntroduce()
         {
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Witaj w grze o nazwie Milionerzy!");
             Console.ResetColor();
@@ -38,9 +59,6 @@ namespace Milionerzy
 
         public void UserIntroduce()
         {
-            Console.WriteLine("Proszę podaj mi swoje imię:");
-            UserName = Console.ReadLine();
-            Console.Clear();
 
             FilePath = UserName.ToLower() + ".txt";
 
@@ -126,6 +144,66 @@ namespace Milionerzy
             questionItem.CorrectAnswer = "d";
             QuestionList.Add(questionItem);
 
+            questionItem = new QuestionItem();
+            questionItem.QuestionText = "Na ile maksymalnie sposobów możesz się ubrać, mając dwie pary butów, trzy pary spodni i pięć koszulek?";
+            questionItem.Answers = new List<string>();
+            questionItem.AddAnswer("Na 10");
+            questionItem.AddAnswer("Na 16");
+            questionItem.AddAnswer("Na 25");
+            questionItem.AddAnswer("Na 30");
+            questionItem.CorrectAnswer = "d";
+            QuestionList.Add(questionItem);
+
+            questionItem = new QuestionItem();
+            questionItem.QuestionText = "Wnuk Syzyfa usiłował dostać się na Olimp, wzlatując:";
+            questionItem.Answers = new List<string>();
+            questionItem.AddAnswer("Na skrzydłach Ikara");
+            questionItem.AddAnswer("W sandałach Hermesa");
+            questionItem.AddAnswer("Na skrzydłach Nike");
+            questionItem.AddAnswer("Na grzbiecie Pegaza");
+            questionItem.CorrectAnswer = "d";
+            QuestionList.Add(questionItem);
+
+            questionItem = new QuestionItem();
+            questionItem.QuestionText = "Góralskie zabocyć to:";
+            questionItem.Answers = new List<string>();
+            questionItem.AddAnswer("Zapomnieć");
+            questionItem.AddAnswer("Zobaczyć");
+            questionItem.AddAnswer("Obrazić się");
+            questionItem.AddAnswer("Zejść z drogi");
+            questionItem.CorrectAnswer = "a";
+            QuestionList.Add(questionItem);
+
+            questionItem = new QuestionItem();
+            questionItem.QuestionText = "Wyrwać się jak filip z konopi, czyli:";
+            questionItem.Answers = new List<string>();
+            questionItem.AddAnswer("Oczyścić organizm z THC");
+            questionItem.AddAnswer("Dać drapaka");
+            questionItem.AddAnswer("Wywinąć się od śmierci");
+            questionItem.AddAnswer("Powiedzieć coś niestosownego");
+            questionItem.CorrectAnswer = "d";
+            QuestionList.Add(questionItem);
+
+            questionItem = new QuestionItem();
+            questionItem.QuestionText = "W której z tych zwycięskich bitew wojskami polskimi nie dowodził król?";
+            questionItem.Answers = new List<string>();
+            questionItem.AddAnswer("Pod Grunwaldem w 1410");
+            questionItem.AddAnswer("Pod Kircholmem w 1605");
+            questionItem.AddAnswer("Pod Beresteczkiem w 1651");
+            questionItem.AddAnswer("Pod Wiedniem w 1683");
+            questionItem.CorrectAnswer = "b";
+            QuestionList.Add(questionItem);
+
+            questionItem = new QuestionItem();
+            questionItem.QuestionText = "Ksiądz zawsze odmawia modlitwę z egzorcyzmem:";
+            questionItem.Answers = new List<string>();
+            questionItem.AddAnswer("Chrzcząc dziecko");
+            questionItem.AddAnswer("Przed pasterką");
+            questionItem.AddAnswer("Przed pogrzebem");
+            questionItem.AddAnswer("Gdy święci jajka");
+            questionItem.CorrectAnswer = "a";
+            QuestionList.Add(questionItem);
+
             var random = new Random();
             var randomList = QuestionList.OrderBy(item => random.Next());
 
@@ -168,8 +246,18 @@ namespace Milionerzy
                             Console.ReadLine();
                             Console.ResetColor();
                         }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Niestety, jest to błędna odpowiedź.");
+                            Console.WriteLine();
+                            Console.WriteLine("Poprawna odpowiedź to odpowiedź: " + question.CorrectAnswer.ToUpper());
+                            Console.ReadLine();
+                            Console.ResetColor();
+                            break;
+                        }
                     }
-                    else if(LifebuoyUsed >= 2)
+                    else
                     {
                         Console.WriteLine("Niestety, wykorzystałeś już wszystkie koła ratunkowe, proszę odpowiedz na pytanie.");
                         Console.WriteLine();
@@ -184,6 +272,16 @@ namespace Milionerzy
                             Console.WriteLine("Posiadasz już " + Prize[i] + " PLN!");
                             Console.ReadLine();
                             Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Niestety, jest to błędna odpowiedź.");
+                            Console.WriteLine();
+                            Console.WriteLine("Poprawna odpowiedź to odpowiedź: " + question.CorrectAnswer.ToUpper());
+                            Console.ReadLine();
+                            Console.ResetColor();
+                            break;
                         }
                     }
                     
@@ -206,6 +304,7 @@ namespace Milionerzy
 
         public void GameCompletion(int prize)
         {
+            Console.Clear();
             var userPrize = Prize[prize];
             Console.WriteLine("Dziękuję Ci bardzo za grę! Mam nadzieję, że niedługo znów sie spotakmy!");
             Console.WriteLine("Twoje zarobione pieniądze to: " + userPrize + " PLN!");

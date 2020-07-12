@@ -8,11 +8,10 @@ namespace Milionerzy
         static void Main(string[] args)
         {
             var game = new GameManager();
-            game.GameIntroduce();
+            game.GameInterface();
             game.UserIntroduce();
             game.GameBegin();
             game.GetAskQuestions();
-
         }
     }
 }
